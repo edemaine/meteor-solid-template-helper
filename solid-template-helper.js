@@ -46,7 +46,7 @@ Template.Solid.onDestroyed(function () {
 // Gets the name of the template inside of which this instance of `{{>
 // Solid ...}}` is being used. Used to print more explicit error messages.
 function parentTemplateName () {
-  const view = Blaze.getView();
+  let view = Blaze.getView();
   if (!view || view.name !== "Template.Solid")
     throw new Error("Unexpected: called outside of Template.Solid");
 
