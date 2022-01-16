@@ -1,12 +1,13 @@
-// This code is heavily based on react-template-helper:
+// This code is based on react-template-helper:
 // https://github.com/meteor/react-packages/blob/master/packages/react-template-helper/react-template-helper.js
 // which is licensed under the same MIT License (but with different authors)
 
-import { checkNpmVersions } from 'meteor/tmeasday:check-npm-versions';
+import {checkNpmVersions} from 'meteor/tmeasday:check-npm-versions';
 checkNpmVersions({
   'solid-js': '>=1',
 }, 'solid-template-helper');
 
+const {createStore, reconcile} = require('solid-js/store');
 const SolidWeb = require('solid-js/web');
 
 // Empty template; logic in `onRendered` below
@@ -17,6 +18,7 @@ Template.Solid.onRendered(function () {
   const template = this;
   const container = this.firstNode.parentNode;
 
+  let lastComponent, setRenderProps;
   this.autorun(function (c) {
     const data = Blaze.getData();
     const component = data && data.component;
@@ -32,10 +34,21 @@ Template.Solid.onRendered(function () {
     }
     const props = Object.assign({}, data);
     delete props.component;
-    if (template.dispose) template.dispose();
-    template.dispose = SolidWeb.render(
-      () => SolidWeb.createComponent(component, props),
-      container);
+
+    if (component !== lastComponent) {
+      // Initial render or changed component
+      if (template.dispose) template.dispose();
+      template.dispose = SolidWeb.render(
+        () => {
+          let renderProps;
+          [renderProps, setRenderProps] = createStore(props);
+          return SolidWeb.createComponent(component, renderProps);
+        }, container);
+    } else {
+      // Same component; just update changed props reactively
+      setRenderProps(reconcile(props));
+    }
+    lastComponent = component;
   });
 });
 
@@ -45,7 +58,8 @@ Template.Solid.onDestroyed(function () {
 
 // Gets the name of the template inside of which this instance of `{{>
 // Solid ...}}` is being used. Used to print more explicit error messages.
-function parentTemplateName () {
+// Roughly identical to react-template-helper.js's `parentTemplateName`.
+function parentTemplateName() {
   let view = Blaze.getView();
   if (!view || view.name !== "Template.Solid")
     throw new Error("Unexpected: called outside of Template.Solid");

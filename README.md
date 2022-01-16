@@ -28,7 +28,8 @@ a `<template>`).  The `component` argument should resolve (via a template
 helper) to a SolidJS component function.  Optionally, you can provide other
 arguments (via more template helpers or, more usefully, from template data)
 that will be passed in as props to that component;
-if the arguments change reactively, the component will rerender.
+if the arguments change reactively, the component will update reactively
+(avoiding a complete dispose/render cycle).
 
 Here is an example HTML template that uses a SolidJS component:
 

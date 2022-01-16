@@ -1,6 +1,6 @@
 Package.describe({
   name: 'edemaine:solid-template-helper',
-  version: '0.0.0',
+  version: '0.1.0',
   summary: 'Use SolidJS components in Meteor Blaze templates',
   git: 'https://github.com/edemaine/meteor-solid-template-helper',
   documentation: 'README.md',
