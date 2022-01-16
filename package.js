@@ -10,8 +10,8 @@ Package.onUse((api) => {
   api.versionsFrom('2.5.3');
 
   api.use([
-    'templating',
     'ecmascript',
+    'templating@1.0.0',
     'tmeasday:check-npm-versions@1.0.2',
   ]);
 
