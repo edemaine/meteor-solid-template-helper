@@ -1,6 +1,6 @@
 # SolidJS Components in Blaze Templates
 
-This package makes it easy to use ([SolidJS](https://www.solidjs.com/)
+This package makes it easy to use [SolidJS](https://www.solidjs.com/)
 components within
 [Meteor](https://www.meteor.com/) [Blaze](https://blazejs.org/) templates.
 This makes it easy to gradually transition your Meteor project's user interface
